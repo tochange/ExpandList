@@ -17,8 +17,8 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.richie.expandable.Util;
 import com.richie.expandable.R;
+import com.richie.expandable.Util;
 import com.richie.expandable.adapter.ExpandableListAdapter;
 import com.richie.expandable.adapter.GroupExpandedListener;
 import com.richie.expandable.adapter.SelectedListAdapter;
@@ -75,17 +75,20 @@ public class BottomMenuEditFragment extends Fragment implements View.OnClickList
         listView.setOnChildClickListener(new ExpandableListView.OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                final boolean oldState = classifies.get(groupPosition).items.get(childPosition).selected;
-                classifies.get(groupPosition).items.get(childPosition).selected = !oldState;
-
-                mSelectedItems = filterSelectedItems(classifies);
-                if (!oldState) {
-                    if (mSelectedItems.size() >= (MAX_SELECTED_COUNT + 1)) {
-                        classifies.get(groupPosition).items.get(childPosition).selected = oldState;
-                        Toast.makeText(v.getContext(), "已达到最大" + MAX_SELECTED_COUNT + "个选中", Toast.LENGTH_SHORT).show();
-                        return true;
-                    }
+                Item item = classifies.get(groupPosition).items.get(childPosition);
+                final boolean oldState = item.selected;
+                if (!oldState && mSelectedItems.size() >= (MAX_SELECTED_COUNT)) {
+                    Toast.makeText(v.getContext(), "已达到最大" + MAX_SELECTED_COUNT + "个选中", Toast.LENGTH_SHORT).show();
+                    return true;
                 }
+
+                item.selected = !oldState;
+                if (item.selected) {
+                    mSelectedItems.add(item);
+                } else {
+                    mSelectedItems.remove(item);
+                }
+
                 adapter.notifyDataSetChanged();
 
                 updateSelectedItemView(recyclerView, mSelectedItems);
@@ -101,25 +104,30 @@ public class BottomMenuEditFragment extends Fragment implements View.OnClickList
         config.edit().putString(KEY, s).apply();
     }
 
-    private ArrayList<Item> restoreData(ArrayList<Util.Classify> classifies) {
+    private ArrayList<Item> restoreData(ArrayList<Util.Classify> addItems) {
         config = getActivity().getSharedPreferences("config", 0);
         String selectedItems = config.getString(KEY, "");
 
         final Gson gson = new Gson();
-        ArrayList<Item> items = gson.fromJson(selectedItems,
+        final ArrayList<Item> historyItems = gson.fromJson(selectedItems,
                 new TypeToken<ArrayList<Item>>() {
                 }.getType());
-        if (items == null || items.isEmpty()) return null;
 
-        for (Util.Classify classify : classifies) {
+        final ArrayList<Item> ret = new ArrayList<>();
+        if (historyItems == null || historyItems.isEmpty()) return ret;
+
+        for (Util.Classify classify : addItems) {
             if (classify == null || classify.items == null) continue;
             for (Item item : classify.items) {
                 if (item == null) continue;
-                boolean isHistorySelected = isHistorySelected(item.name, items);
+                boolean isHistorySelected = isHistorySelected(item.name, historyItems);
                 item.selected = isHistorySelected;
+                if (isHistorySelected) {
+                    ret.add(item);
+                }
             }
         }
-        return items;
+        return ret;
     }
 
     private boolean isHistorySelected(String name, ArrayList<Item> items) {
