@@ -1,0 +1,114 @@
+[
+  {
+    "classify": "支付",
+    "items": [
+      {
+        "name": "线上结算",
+        "selected": false
+      },
+      {
+        "name": "现金",
+        "selected": false
+      },
+      {
+        "name": "储值卡",
+        "selected": false
+      },
+      {
+        "name": "银联卡",
+        "selected": false
+      },
+      {
+        "name": "组合支付",
+        "selected": false
+      },
+      {
+        "name": "客户签单",
+        "selected": false
+      }
+    ]
+  },
+  {
+    "classify": "订单操作",
+    "items": [
+      {
+        "name": "挂单",
+        "selected": false
+      },
+      {
+        "name": "订单查询",
+        "selected": false
+      },
+      {
+        "name": "退货",
+        "selected": false
+      }
+    ]
+  },
+  {
+    "classify": "会员",
+    "items": [
+      {
+        "name": "会员识别",
+        "selected": false
+      },
+      {
+        "name": "前台发卡",
+        "selected": false
+      },
+      {
+        "name": "卡查询",
+        "selected": false
+      },
+      {
+        "name": "挂单换卡",
+        "selected": false
+      },
+      {
+        "name": "修改卡信息",
+        "selected": false
+      },
+      {
+        "name": "积分兑换",
+        "selected": false
+      },
+      {
+        "name": "储值",
+        "selected": false
+      },
+      {
+        "name": "积分查询",
+        "selected": false
+      }
+    ]
+  },
+  {
+    "classify": "其他",
+    "items": [
+      {
+        "name": "电子秤归零",
+        "selected": false
+      },
+      {
+        "name": "打开钱箱",
+        "selected": false
+      },
+      {
+        "name": "交接班",
+        "selected": false
+      },
+      {
+        "name": "商品类别设置",
+        "selected": false
+      },
+      {
+        "name": "设置终端商品",
+        "selected": false
+      },
+      {
+        "name": "退出登陆",
+        "selected": false
+      }
+    ]
+  }
+]
