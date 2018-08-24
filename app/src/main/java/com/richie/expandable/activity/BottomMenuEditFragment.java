@@ -49,6 +49,7 @@ public class BottomMenuEditFragment extends Fragment implements View.OnClickList
 
         final ExpandableListView listView = (ExpandableListView) view.findViewById(R.id.expandable_list);
         setListListener(classifies, listView, recyclerView);
+        listView.expandGroup(0);
         return view;
     }
 
@@ -116,14 +117,17 @@ public class BottomMenuEditFragment extends Fragment implements View.OnClickList
         final ArrayList<Item> ret = new ArrayList<>();
         if (historyItems == null || historyItems.isEmpty()) return ret;
 
-        for (Util.Classify classify : addItems) {
-            if (classify == null || classify.items == null) continue;
-            for (Item item : classify.items) {
-                if (item == null) continue;
-                boolean isHistorySelected = isHistorySelected(item.name, historyItems);
-                item.selected = isHistorySelected;
-                if (isHistorySelected) {
-                    ret.add(item);
+        for (Item i : historyItems) {
+            if (i == null) continue;
+            for (Util.Classify classify : addItems) {
+                if (classify == null || classify.items == null) continue;
+                for (Item item : classify.items) {
+                    if (item == null) continue;
+                    if (i.name.equals(item.name)) {
+                        item.selected = true;
+                        ret.add(item);
+                        break;
+                    }
                 }
             }
         }
